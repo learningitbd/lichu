@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>লিচু বাজার - অনলাইন তাজা লিচু ডেলিভারি</title>
+    <!-- Tailwind CSS Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans select-none antialiased text-gray-800">
+
+    <!-- Top Floating Contacts Notification Banner -->
+    <div class="bg-rose-600 text-white text-xs md:text-sm py-2 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2 relative z-50">
+        <span>আমাদের যে কোন পণ্য অর্ডার করতে কল বা WhatsApp করুন:</span>
+        <a href="tel:+88012345678" class="underline font-bold font-mono tracking-wider hover:text-rose-100 flex items-center gap-1">
+            📞 88012345678
+        </a>
+    </div>
+
+    <!-- Sticky Main Responsive Header -->
+    <header class="bg-white sticky top-0 shadow-xs z-40 border-b border-gray-100">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            
+            <!-- Logo Section with custom Bangladesh feel "ল" + leaf -->
+            <div class="flex items-center gap-2 cursor-pointer" onclick="changeScreen('home')">
+                <div class="w-10 h-10 bg-rose-50 border border-rose-200 rounded-full flex items-center justify-center relative shadow-xs overflow-hidden">
+                    <span class="text-rose-600 font-extrabold text-2xl relative block pt-1">লি</span>
+                    <span class="absolute right-1 top-1 bg-green-500 w-2.5 h-2.5 rounded-full border border-white"></span>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-rose-600 text-lg md:text-xl tracking-tight leading-none">লিচু বাজার</h1>
+                    <p class="text-[9px] md:text-[10px] text-gray-400 font-medium">১০০% অর্গানিক ও সুমিষ্ট বাগান থেকে ঘরে</p>
+                </div>
+            </div>
+
+            <!-- Desktop Category Links -->
+            <nav class="hidden md:flex items-center gap-5" id="categories-container-desktop">
+                <button onclick="filterCategory('all'); changeScreen('home')" class="text-sm font-semibold text-rose-600 hover:text-rose-700 cursor-pointer">সব লিচু</button>
+                <button onclick="filterCategory('dinajpur'); changeScreen('home')" class="text-sm font-semibold text-gray-600 hover:text-rose-600 cursor-pointer">দিনাজপুর লিচু</button>
+                <button onclick="filterCategory('rajshahi'); changeScreen('home')" class="text-sm font-semibold text-gray-600 hover:text-rose-600 cursor-pointer">রাজশাহী লিচু</button>
+                <button onclick="filterCategory('bombai'); changeScreen('home')" class="text-sm font-semibold text-gray-600 hover:text-rose-600 cursor-pointer">বোম্বাই লিচু</button>
+            </nav>
+
+            <!-- Action Buttons: Cart counters + checkout flow navigation -->
+            <div class="flex items-center gap-2">
+                <!-- Shopping Cart Icon Indicator -->
+                <button 
+                  onclick="changeScreen('checkout')"
+                  class="bg-rose-50 hover:bg-rose-100 border border-rose-200 p-2 rounded-full text-rose-600 hover:text-rose-700 transition-colors relative flex items-center justify-center cursor-pointer"
+                  title="কার্ট দেখুন"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="8" cy="21" r="1"></circle>
+                        <circle cx="19" cy="21" r="1"></circle>
+                        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+                    </svg>
+                    <!-- Cart quantity Badge tracker -->
+                    <span id="header-cart-badge" class="cart-badge absolute -top-1.5 -right-1.5 bg-rose-600 text-white font-mono text-[9px] font-bold w-5 h-5 rounded-full flex items-center justify-center border border-white">0</span>
+                </button>
+
+                <!-- Track Order Button -->
+                <button 
+                  onclick="changeScreen('checkout'); showToast('আপনার চলমান অর্ডার তথ্য চেক করতে নিচের সামারি পূরণ করুন...')"
+                  class="bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-1.5 rounded-full text-xs font-bold transition-all shadow-xs flex items-center gap-1 cursor-pointer"
+                >
+                    🔍 Track Order
+                </button>
+
+                <!-- Hamburger menu for mobile devices -->
+                <button id="mobile-menu-btn" class="md:hidden text-gray-700 hover:text-rose-600 p-1 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="4" x2="20" y1="12" y2="12"></line>
+                        <line x1="4" x2="20" y1="6" y2="6"></line>
+                        <line x1="4" x2="20" y1="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Collapsible Mobile Responsive Navigation Rail -->
+        <div id="mobile-nav-panel" class="hidden md:hidden border-t border-gray-100 bg-rose-50 px-4 py-2 text-center animate-fade-in">
+            <div class="flex flex-wrap items-center justify-center gap-3 py-1">
+                <button onclick="filterCategory('all'); changeScreen('home')" class="text-xs font-bold text-gray-700 hover:text-rose-600 py-1.5 px-3 rounded-full bg-white shadow-xs">সব লিচু</button>
+                <button onclick="filterCategory('dinajpur'); changeScreen('home')" class="text-xs font-bold text-gray-700 hover:text-rose-600 py-1.5 px-3 rounded-full bg-white shadow-xs">দিনাজপুর লিচু</button>
+                <button onclick="filterCategory('rajshahi'); changeScreen('home')" class="text-xs font-bold text-gray-700 hover:text-rose-600 py-1.5 px-3 rounded-full bg-white shadow-xs">রাজশাহী লিচু</button>
+                <button onclick="filterCategory('bombai'); changeScreen('home')" class="text-xs font-bold text-gray-700 hover:text-rose-600 py-1.5 px-3 rounded-full bg-white shadow-xs">বোম্বাই লিচু</button>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- ==============================================
+         SCREEN 1: LANDING HOME VIEW
+    =============================================== -->
+    <main id="screen-home" class="flex-1 animate-fade-in">
+        
+        <!-- Premium Hero Slider Section -->
+        <section class="bg-gradient-to-br from-rose-50 to-pink-50 py-6 md:py-12 border-b border-rose-100 relative overflow-hidden">
+            <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-12 items-center gap-6 md:gap-8 relative z-10">
+                
+                <!-- Hero Left content column -->
+                <div class="md:col-span-7 flex flex-col items-center md:items-start text-center md:text-left">
+                    <span class="bg-rose-100 text-rose-700 text-xs font-bold inline-block px-3 py-1 rounded-full mb-3 uppercase tracking-wider">
+                        💯 ১০০% ফ্রেশ ও ফরমালিন মুক্ত
+                    </span>
+                    <h2 class="text-3xl md:text-5xl font-black text-rose-700 tracking-tight leading-tight mb-2">
+                        ফ্রেশ ও মিষ্টি লিচু
+                    </h2>
+                    <h3 class="text-lg md:text-2xl font-bold text-gray-700 leading-snug mb-3">
+                        সরাসরি বাগান থেকে আপনার ঘরে
+                    </h3>
+                    <p class="text-xs md:text-sm text-gray-500 max-w-md leading-relaxed mb-6">
+                        দিনাজপুরের বিখ্যাত বেদানা, রাজশাহী ও বোম্বাই জাতের সর্বোত্তম মিষ্টি লিচু এখন মাত্র একটি ক্লিকেই ঘরে বসে উপভোগ করুন। নিরাপদে ও পরিচ্ছন্ন প্যাকেজিংয়ে দ্রুততম সময়ে হোম ডেলিভারি।
+                    </p>
+                    
+                    <button 
+                      onclick="filterCategory('all'); document.getElementById('dinajpur-anchor').scrollIntoView({ behavior: 'smooth' })"
+                      class="bg-rose-600 hover:bg-rose-700 active:scale-95 text-white font-bold px-6 py-3 rounded-full text-sm md:text-base transition-all shadow-md flex items-center gap-2 cursor-pointer"
+                    >
+                        🎁 এখনই অর্ডার করুন
+                    </button>
+                    
+                    <!-- Micro reassurance rows -->
+                    <div class="flex items-center gap-4 border-t border-rose-100/60 pt-5 mt-6 w-full justify-center md:justify-start">
+                        <span class="text-xs text-rose-700 font-bold flex items-center gap-1">🌱 ১০০% অর্গানিক</span>
+                        <span class="text-xs text-rose-700 font-bold flex items-center gap-1">📦 নিরাপদ প্যাক</span>
+                        <span class="text-xs text-rose-700 font-bold flex items-center gap-1">⚡ দ্রুত ডেলিভারি</span>
+                    </div>
+                </div>
+
+                <!-- Hero Right image container -->
+                <div class="md:col-span-5 flex justify-center">
+                    <div class="relative w-64 h-64 md:w-80 md:h-80 bg-white/40 p-3 rounded-3xl border border-rose-100 shadow-xl overflow-hidden leading-none">
+                        <img 
+                          src="https://images.unsplash.com/photo-1543158085-feacc490ea38?q=80&w=600&auto=format&fit=crop" 
+                          alt="Fresh Red Lychees" 
+                          class="w-full h-full object-cover rounded-2xl"
+                          referrerpolicy="no-referrer"
+                        >
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Graphic decors -->
+            <div class="absolute -bottom-10 -left-10 bg-rose-200/20 w-40 h-40 rounded-full blur-2xl"></div>
+            <div class="absolute -top-10 -right-10 bg-pink-200/20 w-40 h-40 rounded-full blur-2xl"></div>
+        </section>
+
+        <!-- Category Horizontal filter bar inside page -->
+        <section class="max-w-6xl mx-auto px-4 pt-6">
+            <div class="border-b border-gray-200 flex items-center justify-between overflow-x-auto" id="categories-container">
+                <!-- Filled dynamically by script.js -->
+            </div>
+        </section>
+
+        <!-- Dynamic Category 1 Block: Dinajpur Lychees -->
+        <section class="max-w-6xl mx-auto px-4 py-8" id="dinajpur-anchor">
+            <div class="flex items-center justify-between border-b border-rose-200 pb-2 mb-6">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🍒</span>
+                    <h2 class="text-lg md:text-xl font-bold text-gray-900 border-b-2 border-rose-600 pb-2 -mb-[10px]">
+                        দিনাজপুর লিচু
+                    </h2>
+                </div>
+                <button 
+                  onclick="filterCategory('dinajpur')"
+                  class="bg-rose-600 text-white text-[10px] md:text-xs font-bold px-3 py-1 rounded inline-block uppercase tracking-wider hover:bg-rose-700 transition shadow-xs cursor-pointer"
+                >
+                    VIEW ALL
+                </button>
+            </div>
+            
+            <!-- Grid List of items -->
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4" id="dinajpur-products-grid">
+                <!-- Rendered dynamically by script.js -->
+            </div>
+        </section>
+
+        <!-- Seasonal Promo Offer banner card -->
+        <section class="max-w-6xl mx-auto px-4 py-3">
+            <div class="bg-gradient-to-r from-rose-50 to-pink-50 rounded-2xl border border-rose-100 p-6 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm relative overflow-hidden">
+                <div class="flex items-center gap-4 relative z-10 text-center md:text-left flex-col md:flex-row">
+                    <div class="w-16 h-16 bg-white border border-rose-100 rounded-full flex items-center justify-center shadow-xs overflow-hidden shrink-0">
+                        <img src="https://images.unsplash.com/photo-1619546813926-a78fa6372cd2?q=80&w=150" class="w-12 h-12 object-cover rounded-full" referrerpolicy="no-referrer">
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-rose-700 text-lg md:text-xl leading-snug">সিজনের সেরা অফার!</h3>
+                        <p class="text-xs text-gray-600">আমাদের নির্বাচিত তাজা রসালো লিচুতে আকর্ষণীয় ২০% ফ্ল্যাট ডিসকাউন্ট চলছে। অফার মূল্য সীমিত সময়ের জন্য।</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-3 relative z-10 scroll-py-8">
+                    <div class="bg-white border-2 border-rose-200 text-rose-600 rounded-full font-black text-xs md:text-sm p-3 shadow-sm text-center">
+                        UP TO<br><span class="text-lg md:text-xl">20%</span><br>OFF
+                    </div>
+                    <button 
+                      onclick="changeScreen('checkout'); showToast('চেকআউটে LICHU20 কোডটি ব্যবহার করুন!');"
+                      class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-4 py-2.5 rounded-full transition shadow-xs cursor-pointer"
+                    >
+                        কুপন কোড: LICHU20
+                    </button>
+                </div>
+                <!-- Decor background -->
+                <div class="absolute right-0 top-0 w-32 h-32 bg-pink-200/10 rounded-full blur-xl"></div>
+            </div>
+        </section>
+
+        <!-- Dynamic Category 2 Block: Rajshahi Lychees -->
+        <section class="max-w-6xl mx-auto px-4 py-8">
+            <div class="flex items-center justify-between border-b border-rose-200 pb-2 mb-6">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">👑</span>
+                    <h2 class="text-lg md:text-xl font-bold text-gray-900 border-b-2 border-rose-600 pb-2 -mb-[10px]">
+                        রাজশাহী লিচু
+                    </h2>
+                </div>
+                <button 
+                  onclick="filterCategory('rajshahi')"
+                  class="bg-rose-600 text-white text-[10px] md:text-xs font-bold px-3 py-1 rounded inline-block uppercase tracking-wider hover:bg-rose-700 transition shadow-xs cursor-pointer"
+                >
+                    VIEW ALL
+                </button>
+            </div>
+            
+            <!-- Grid List of items -->
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4" id="rajshahi-products-grid">
+                <!-- Rendered dynamically by script.js -->
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- ==============================================
+         SCREEN 2: PRODUCT DETAIL SINGLE VIEW
+    =============================================== -->
+    <main id="screen-product-details" class="max-w-4xl mx-auto px-4 py-8 flex-1 animate-fade-in hidden">
+        
+        <!-- Breadcrumb link back to home -->
+        <div class="mb-6">
+            <button 
+              onclick="changeScreen('home')" 
+              class="inline-flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-rose-600 cursor-pointer"
+            >
+                ← মূল পেজে ফিরে যান
+            </button>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-100 p-4 md:p-6 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            
+            <!-- Grid Column 1: Image display -->
+            <div class="flex flex-col gap-3">
+                <div class="w-full h-64 md:h-80 bg-gray-50 border border-gray-100 rounded-xl overflow-hidden leading-none relative shadow-xs">
+                    <img id="detail-product-image" src="" alt="Lichu" class="w-full h-full object-cover">
+                    <span class="absolute top-2 left-2 bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                        ১০০% খাঁটি বাগান ফ্রেশ
+                    </span>
+                </div>
+                <!-- Mini thumbnails preview text -->
+                <div class="text-[11px] text-gray-400 font-medium text-center">
+                    * প্রাকৃতিক কারণে লিচুর আকার ও রঙের সামান্য তারতম্য হতে পারে।
+                </div>
+            </div>
+
+            <!-- Grid Column 2: Information column -->
+            <div class="flex flex-col justify-between">
+                <div>
+                    <!-- Primary status tabs -->
+                    <div class="flex items-center gap-2 mb-2">
+                        <span id="detail-category" class="bg-rose-50 text-rose-600 text-xs font-bold px-2.5 py-0.5 rounded">
+                            অর্গানিক লট
+                        </span>
+                        <span class="text-xs text-yellow-500 font-bold flex items-center">★★★★★ (৫.০)</span>
+                    </div>
+
+                    <h2 id="detail-title" class="text-2xl md:text-3xl font-bold text-gray-950 mb-1 leading-snug">
+                        লিচু প্রিমিয়াম ঝুড়ি
+                    </h2>
+                    
+                    <div class="flex items-baseline gap-2 mb-3">
+                        <span class="text-[11px] text-gray-400 font-semibold uppercase">আজকের মূল্য:</span>
+                        <span id="detail-base-price" class="text-2xl font-black text-rose-600 font-mono">-- ৳</span>
+                    </div>
+
+                    <!-- Short description brief -->
+                    <p id="detail-description-para" class="text-xs text-gray-500 leading-relaxed mb-6">
+                        বাছাই করা সুমিষ্ট প্রিমিয়াম কোয়ালিটির দেশীয় লিচু। কোনো রাসায়নিক ব্যবহার না করে মিষ্টি স্বাদের নিশ্চয়তা দিয়ে বাগান থেকে সাবধানে প্যাকেটজাত করে পৌঁছে দেওয়া হয়।
+                    </p>
+
+                    <!-- Config Option 1: Weight selector values -->
+                    <div class="mb-5">
+                        <label class="block text-xs font-bold text-gray-800 mb-2">ওজন নির্বাচন করুন (ওজন ভেদে দামের পরিবর্তন হবে):</label>
+                        <div class="flex items-center gap-2" id="detail-weight-buttons">
+                            <!-- Filled dynamically by script.js -->
+                        </div>
+                    </div>
+
+                    <!-- Config Option 2: Quantity selector stepper counter control -->
+                    <div class="mb-6 flex items-center gap-4">
+                        <span class="text-xs font-bold text-gray-800">পরিমাণ:</span>
+                        <div class="flex items-center border border-gray-200 rounded-md overflow-hidden bg-gray-50">
+                            <button 
+                              onclick="adjustDetailQty(-1)"
+                              class="w-8 h-8 hover:bg-gray-100 flex items-center justify-center font-bold text-sm select-none cursor-pointer"
+                            >-</button>
+                            <span id="detail-qty-num" class="w-10 text-center font-bold font-mono text-sm">1</span>
+                            <button 
+                              onclick="adjustDetailQty(1)"
+                              class="w-8 h-8 hover:bg-gray-100 flex items-center justify-center font-bold text-sm select-none cursor-pointer"
+                            >+</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Action CTA row -->
+                <div class="flex flex-col gap-2.5 mt-4">
+                    
+                    <div class="grid grid-cols-2 gap-2">
+                        <!-- Add to cart -->
+                        <button 
+                          onclick="detailAddToCart()"
+                          class="bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-600 font-bold py-2.5 rounded-lg text-xs md:text-sm transition-colors cursor-pointer"
+                        >
+                            🛒 কার্টনে যোগ করুন
+                        </button>
+                        <!-- Buy Now -->
+                        <button 
+                          onclick="detailBuyNow()"
+                          class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-lg text-xs md:text-sm transition-colors text-center cursor-pointer"
+                        >
+                            🛍️ এখনই কিনুন
+                        </button>
+                    </div>
+
+                    <!-- WhatsApp Order helper option (Highly relevant in BD) -->
+                    <button 
+                      onclick="detailWhatsAppOrder()"
+                      class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg text-xs md:text-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
+                          <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.948h.008c4.364 0 7.92-3.558 7.922-7.929a7.89 7.89 0 0 0-2.323-5.597h-.001zm-5.24 8.087a1.47 1.47 0 0 1-.174-.176l-.083-.08a11.191 11.191 0 0 1-1.173-1.425l-.078-.113.111-.112c.113-.111.111-.111.233-.233.125-.124.125-.124.252-.25.132-.132.128-.13.15-.148a.403.403 0 0 0 .11-.27.408.408 0 0 0-.083-.243c-.018-.027-.08-.184-.136-.312-.056-.128-.124-.265-.184-.384-.055-.109-.12-.224-.183-.346-.06-.115-.11-.202-.132-.239-.06-.12-.174-.113-.236-.113-.06-.001-.122-.001-.184-.001a1.21 1.21 0 0 0-.828.314c-.183.184-.537.525-.537 1.282 0 .757.55 1.488.625 1.59.076.103 1.08 1.648 2.617 2.31.365.158.649.252.87.323.368.118.702.101.967.062.296-.044.912-.373 1.04-.733.127-.36.127-.67.089-.734-.038-.064-.143-.102-.298-.18z"/>
+                        </svg>
+                        WhatsApp-এ সরাসরি অর্ডার দিন
+                    </button>
+
+                </div>
+
+                <!-- Features security boxes -->
+                <div class="mt-5 border-t border-gray-100 pt-4">
+                    <h4 class="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">পণ্য নিরাপত্তা বিবরণী:</h4>
+                    <ul class="flex flex-wrap gap-2" id="detail-features-list">
+                        <!-- Placed dynamically -->
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Product descriptions tab panel detail details -->
+        <section class="bg-white rounded-xl border border-gray-100 p-4 shadow-3xs mb-8">
+            <h3 class="font-bold text-gray-900 border-b border-gray-100 pb-2 mb-3 text-sm flex items-center gap-1.5">
+                📝 পণ্যের বিবরণ
+            </h3>
+            <p id="detail-long-desc" class="text-xs md:text-sm text-gray-600 leading-relaxed font-normal">
+                মিষ্টি ও তরতাজা সুস্বাদু লিচু, রাজশাহী ও দিনাজপুর অঞ্চলের সুসজ্জিত বাগান থেকে সেরা পরিচ্ছন্ন উপায়ে সংগ্রহ করা হয়। কোনো প্রকার কেমিক্যাল বা জোরপূর্বক হরমোন স্প্রে প্রয়োগ করা হয়নি, সম্পূর্ণ স্বাস্থ্যসম্মত উপায়ে প্রাকৃতিকভাবে পাকার পর যত্নশীলভাবে ছিঁড়ে বাজারজাত করা হয়। পাতলা চামড়া ও অতুলনীয় স্বাদের জন্য এটি বিখ্যাত।
+            </p>
+        </section>
+
+        <!-- Dynamic related materials row -->
+        <section class="bg-gray-100/50 rounded-2xl p-4">
+            <h3 class="font-bold text-gray-800 text-xs uppercase mb-3 tracking-wider text-center md:text-left">
+                📦 আমাদের রিলেটেড পণ্য
+            </h3>
+            <div class="grid grid-cols-3 gap-3" id="detail-related-grid">
+                <!-- Placed dynamically -->
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- ==============================================
+         SCREEN 3: CHECKOUT BILLING & SUMMARY VIEW
+    =============================================== -->
+    <main id="screen-checkout" class="max-w-4xl mx-auto px-4 py-8 flex-1 animate-fade-in hidden">
+        
+        <!-- Cart Empty Indicator Page -->
+        <div id="checkout-empty-warning" class="text-center py-16 bg-white rounded-2xl border border-gray-100 shadow-3xs">
+            <span class="text-5xl mb-4 block">🛒</span>
+            <h3 class="font-bold text-gray-800 text-lg mb-2">আপনার লিচু কার্টটি একদম খালি!</h3>
+            <p class="text-xs text-gray-400 mb-6">তাজা মিষ্টি লিচু অর্ডার করতে আমাদের হোমপেজ থেকে পছন্দের লিচু যুক্ত করুন।</p>
+            <button 
+              onclick="changeScreen('home')"
+              class="bg-rose-600 text-white font-bold text-xs py-2 px-6 rounded-full cursor-pointer hover:bg-rose-700 transition"
+            >
+                লিচু ব্রাউজ করুন
+            </button>
+        </div>
+
+        <!-- Checkout Billing Layout grid when populated -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 relative" id="checkout-main-grid">
+            
+            <!-- Left inputs panel column 1 -->
+            <div class="md:col-span-7 bg-white rounded-2xl border border-gray-100 p-4 md:p-6 shadow-sm">
+                
+                <div class="flex items-center gap-2 border-b border-gray-100 pb-3 mb-5">
+                    <span class="text-xl">📋</span>
+                    <div>
+                        <h3 class="font-bold text-gray-900 leading-none">বিস্তারিত তথ্য পূরণ করুন</h3>
+                        <p class="text-[10px] text-gray-400 mt-1">"অর্ডার নিশ্চিত করুন" বাটনে ক্লিক করে ক্যাশ অন ডেলিভারি অর্ডার দিন</p>
+                    </div>
+                </div>
+
+                <form onsubmit="confirmOrder(event)" class="space-y-4">
+                    
+                    <!-- Billing Input 1: Name -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1.5" for="billing-name">আপনার নাম *</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">👤</span>
+                            <input 
+                              type="text" 
+                              id="billing-name" 
+                              placeholder="আপনার নাম লিখুন..." 
+                              required
+                              class="w-full bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-3 py-2.5 text-xs md:text-sm focus:outline-rose-500 transition-all font-medium"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Billing Input 2: Mobile Number -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1.5" for="billing-phone">মোবাইল নাম্বার *</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">📞</span>
+                            <input 
+                              type="tel" 
+                              id="billing-phone" 
+                              placeholder="১১ ডিজিটের মোবাইল নাম্বার লিখুন..." 
+                              required
+                              pattern="[0-9]{11}"
+                              title="অনুগ্রহ করে সঠিক ১১ ডিজিটের বাংলাদেশি নাম্বার দিন"
+                              class="w-full bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-3 py-2.5 text-xs md:text-sm focus:outline-rose-500 transition-all font-mono font-medium"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Billing Input 3: Deliver Address -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1.5" for="billing-address">ঠিকানা লিখুন *</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-3 text-gray-400 text-xs">📍</span>
+                            <textarea 
+                              id="billing-address" 
+                              rows="3" 
+                              placeholder="রোড, বাড়ি নম্বর, এরিয়া এবং ইউনিয়ন/জেলা বিস্তারিত লিখুন..." 
+                              required
+                              class="w-full bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-3 py-2 text-xs md:text-sm focus:outline-rose-500 transition-all font-medium"
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Billing Option 4: Shipping area switcher -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1.5">ডেলিভারি এরিয়া নির্বাচন করুন *</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="border rounded-lg p-3 flex items-center gap-2 cursor-pointer bg-gray-50 select-none hover:border-rose-300">
+                                <input 
+                                  type="radio" 
+                                  name="zone-select" 
+                                  checked 
+                                  onclick="setDeliveryArea('inside')"
+                                  class="accent-rose-600"
+                                >
+                                <div class="text-left">
+                                    <h4 class="font-bold text-xs">Inside Dhaka</h4>
+                                    <p class="text-[10px] text-gray-400">ডেলিভারি চার্জ: ১০০৳</p>
+                                </div>
+                            </label>
+
+                            <label class="border rounded-lg p-3 flex items-center gap-2 cursor-pointer bg-gray-50 select-none hover:border-rose-300">
+                                <input 
+                                  type="radio" 
+                                  name="zone-select" 
+                                  onclick="setDeliveryArea('outside')"
+                                  class="accent-rose-600"
+                                >
+                                <div class="text-left">
+                                    <h4 class="font-bold text-xs">Outside Dhaka</h4>
+                                    <p class="text-[10px] text-gray-400">ডেলিভারি চার্জ: ১৫০৳</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Billing reassurance notes -->
+                    <div class="bg-rose-50 rounded-lg border border-rose-100 p-3">
+                        <h4 class="font-bold text-rose-700 text-xs mb-1">📋 পেমেন্ট মেথড:</h4>
+                        <div class="flex items-center gap-1.5 text-[11px] text-gray-700">
+                            <span class="text-[12px]">💵</span>
+                            <strong>ক্যাশ অন ডেলিভারি (Cash on Delivery):</strong>
+                            <span>পণ্য হাতে পেয়ে সম্পূর্ণ মূল্য পরিশোধ করুন।</span>
+                        </div>
+                    </div>
+
+                    <!-- Confirm button -->
+                    <button 
+                      type="submit"
+                      class="w-full bg-rose-600 hover:bg-rose-700 active:scale-[98%] text-white font-bold py-3.5 rounded-lg text-sm transition-all shadow-md mt-6 cursor-pointer"
+                    >
+                        📝 অর্ডার নিশ্চিত করুন
+                    </button>
+
+                </form>
+
+            </div>
+
+            <!-- Right summary panel column 2 -->
+            <div class="md:col-span-5 flex flex-col gap-4">
+                
+                <!-- Products list summary -->
+                <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+                    <h3 class="font-bold text-gray-900 border-b border-gray-100 pb-2 mb-3 text-sm">
+                        🛍️ অর্ডার সামারি
+                    </h3>
+                    
+                    <!-- Dynamic Cart items list scrollable container -->
+                    <div id="checkout-items-list" class="max-h-60 overflow-y-auto pr-1">
+                        <!-- Filled dynamically -->
+                    </div>
+
+                    <!-- Interactive Coupon Promo entries -->
+                    <div class="border-t border-gray-100 pt-4 mt-3">
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">কুপন কোড (অফশনাল):</label>
+                        <div class="flex gap-2">
+                            <input 
+                              type="text" 
+                              id="promo-input" 
+                              placeholder="LICHU20" 
+                              class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-xs font-semibold focus:outline-rose-500 uppercase flex-1 font-mono"
+                            >
+                            <button 
+                              onclick="applyPromoCode()"
+                              class="bg-gray-900 hover:bg-black text-white text-xs font-bold px-4 py-1.5 rounded-lg transition cursor-pointer"
+                            >
+                                APPLY
+                            </button>
+                        </div>
+                        <div id="coupon-alert" class="mt-1.5"></div>
+                    </div>
+
+                </div>
+
+                <!-- Totals Calculator display card -->
+                <div class="bg-gray-900 text-white rounded-2xl p-5 shadow-md">
+                    <h3 class="font-bold border-b border-gray-800 pb-2 mb-3 text-xs uppercase tracking-wider text-gray-400">হিসাব বিবরণী:</h3>
+                    
+                    <div class="space-y-2 text-xs font-medium">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">লিচুর উপ-মোট:</span>
+                            <span id="summary-subtotal" class="font-mono text-gray-200">0৳</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">প্রোমো ডিসকাউন্ট:</span>
+                            <span id="summary-discount" class="font-mono text-green-400">0৳</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">ডেলিভারি চার্জ:</span>
+                            <span id="summary-delivery" class="font-mono text-gray-200">0৳</span>
+                        </div>
+                        <div class="border-t border-gray-800 pt-3 flex justify-between items-baseline font-black">
+                            <span class="text-sm">সর্বমোট মূল্য:</span>
+                            <span id="summary-total" class="font-mono text-xl text-rose-400">0৳</span>
+                        </div>
+                    </div>
+
+                    <p class="text-[9px] text-gray-500 mt-4 text-center leading-relaxed">
+                        * কোন জটিলতায় সরাসরি কল করুন: <span class="font-bold font-mono text-gray-400">88012345678</span>
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- ==============================================
+         GLOBAL COMMON INTERACTIVE COMPONENTS:
+    =============================================== -->
+
+    <!-- 1. Beautiful Order Success Invoice Dialog Modal (Overlay style) -->
+    <div id="order-success-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-fade-in">
+            
+            <!-- Modal Header banner -->
+            <div class="bg-rose-600 text-white p-5 text-center relative">
+                <span class="text-4xl block mb-2">🎉</span>
+                <h3 class="text-lg font-black tracking-tight">আপনার অর্ডার নিশ্চিত হয়েছে!</h3>
+                <p class="text-[11px] text-rose-100 mt-1">আমরা দ্রুত আপনার সাথে যোগাযোগ করব ইনশাআল্লাহ</p>
+            </div>
+            
+            <!-- Invoice Details Core summary -->
+            <div class="p-5 max-h-[300px] overflow-y-auto">
+                <div class="border border-dashed border-gray-200 rounded-xl p-3 bg-gray-50">
+                    <div class="flex justify-between text-[11px] text-gray-400 border-b border-gray-100 pb-1.5 mb-2">
+                        <span>ইনভয়েস নং-</span>
+                        <span id="modal-invoice-num" class="font-bold font-mono">--</span>
+                    </div>
+
+                    <!-- Client address summary details -->
+                    <div class="space-y-1 mb-4 text-xs font-normal">
+                        <p><strong class="text-gray-600">নাম:</strong> <span id="modal-client-name" class="text-gray-900 font-semibold">--</span></p>
+                        <p><strong class="text-gray-600">মোবাইল:</strong> <span id="modal-client-phone" class="text-gray-900 font-mono">--</span></p>
+                        <p><strong class="text-gray-600">ঠিকানা:</strong> <span id="modal-client-address" class="text-gray-900">--</span></p>
+                    </div>
+
+                    <!-- Items rows container -->
+                    <div class="mb-4">
+                        <h4 class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">অর্ডারকৃত পণ্যসমূহ:</h4>
+                        <div id="modal-items-sublist" class="space-y-1">
+                            <!-- Rows placed dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Invoiced values -->
+                    <div class="pt-2 border-t border-gray-200/60 space-y-1 text-xs">
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">উপ-মোট:</span>
+                            <span id="modal-subtotal" class="font-mono text-gray-700">0৳</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">ডিসকাউন্ট:</span>
+                            <span id="modal-discount" class="font-mono text-green-600">0৳</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">ডেলিভারি:</span>
+                            <span id="modal-delivery" class="font-mono text-gray-700">0৳</span>
+                        </div>
+                        <div class="flex justify-between font-bold text-sm text-gray-900 border-t border-dashed border-gray-200 pt-2 mt-1">
+                            <span>সর্বমোট পরিশোধ:</span>
+                            <span id="modal-total" class="font-mono">0৳</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Modal Bottom Actions -->
+            <div class="p-4 bg-gray-50 border-t border-gray-100 flex flex-col gap-2">
+                <button 
+                  onclick="triggerWhatsAppReceipt()"
+                  class="bg-green-500 hover:bg-green-600 text-white font-bold py-2.5 px-4 rounded-lg text-xs md:text-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+                >
+                    💬 WhatsApp-এ রিসিট পাঠিয়ে দিন
+                </button>
+                <button 
+                  onclick="closeOrderModal()"
+                  class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-lg text-xs transition cursor-pointer"
+                >
+                    বন্ধ করুন
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 2. Reassurance and Features Horizontal Row (Common) -->
+    <section class="bg-rose-600 text-white py-8 border-t border-rose-700">
+        <div class="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            
+            <div class="flex flex-col items-center gap-1.5 p-2 bg-rose-700/30 rounded-xl border border-rose-500/10">
+                <span class="text-2xl">🌱</span>
+                <h4 class="font-bold text-sm tracking-tight">খাঁটি অর্গানিক ফল</h4>
+                <p class="text-[10px] text-rose-100">প্রাকৃতিক ও নিরাপদ উপাদান</p>
+            </div>
+
+            <div class="flex flex-col items-center gap-1.5 p-2 bg-rose-700/30 rounded-xl border border-rose-500/10">
+                <span class="text-2xl">⚡</span>
+                <h4 class="font-bold text-sm tracking-tight">দ্রুত ডেলিভারি</h4>
+                <p class="text-[10px] text-rose-100">সারাদেশে তরতাজা পৌঁছায়</p>
+            </div>
+
+            <div class="flex flex-col items-center gap-1.5 p-2 bg-rose-700/30 rounded-xl border border-rose-500/10">
+                <span class="text-2xl">🛡️</span>
+                <h4 class="font-bold text-sm tracking-tight">নিরাপদ পেমেন্ট</h4>
+                <p class="text-[10px] text-rose-100">১০০% ক্যাশ অন ডেলিভারি</p>
+            </div>
+
+            <div class="flex flex-col items-center gap-1.5 p-2 bg-rose-700/30 rounded-xl border border-rose-500/10">
+                <span class="text-2xl">💬</span>
+                <h4 class="font-bold text-sm tracking-tight">সহজ সাপোর্ট</h4>
+                <p class="text-[10px] text-rose-100">২৪/৭ কনেক্টিভিটি রেডি</p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ==============================================
+         STICKY FOOTER
+    =============================================== -->
+    <footer class="bg-gray-900 text-gray-400 text-xs py-8 border-t border-gray-800">
+        <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-12 gap-8 mb-8">
+            
+            <!-- Left Info column  -->
+            <div class="md:col-span-5 space-y-3 shrink-0">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🍒</span>
+                    <h3 class="font-black text-white text-base">লিচু বাজার</h3>
+                </div>
+                <p class="leading-relaxed text-[11px] max-w-sm">
+                    Mango Bazar নেটওয়ার্কের একটি বিশেষায়িত অঙ্গপ্রতিষ্ঠান। আমাদের মূল লক্ষ্য রাজশাহী ও দিনাজপুরের স্বনামধন্য মিষ্টি লিচুর স্বাদ কোনো ধরনের ঝুটঝামেলা বা ক্ষতিকর প্রিজারভেটিভ ছাড়া সরাসরি আপনার বাসায় সুরক্ষিত ও সতেজ অবস্থায় পৌঁছে দেওয়া।
+                </p>
+                <div class="flex items-center gap-3 pt-2">
+                    <a href="#" class="w-8 h-8 rounded-full bg-gray-800 hover:bg-rose-600 transition flex items-center justify-center text-white" title="ফেসবুক">f</a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-gray-800 hover:bg-rose-600 transition flex items-center justify-center text-white" title="টুইটার">t</a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-gray-800 hover:bg-rose-600 transition flex items-center justify-center text-white" title="ইউটিউব">y</a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-gray-800 hover:bg-rose-600 transition flex items-center justify-center text-white" title="ইনস্টাগ্রাম">i</a>
+                </div>
+            </div>
+
+            <!-- Middle Columns lists 1 -->
+            <div class="md:col-span-3">
+                <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-3.5 flex items-center gap-1.5">
+                    📂 আমাদের পণ্যসমূহ
+                </h4>
+                <ul class="space-y-2 text-[11px]">
+                    <li><a href="#" onclick="filterCategory('all'); changeScreen('home')" class="hover:text-rose-500 transition">সব লিচু কালেকশন</a></li>
+                    <li><a href="#" onclick="filterCategory('dinajpur'); changeScreen('home')" class="hover:text-rose-500 transition">ডিলাক্স দিনাজপুর লিচু</a></li>
+                    <li><a href="#" onclick="filterCategory('rajshahi'); changeScreen('home')" class="hover:text-rose-500 transition">প্রিমিয়াম রাজশাহী উপহার বক্স</a></li>
+                    <li><a href="#" onclick="filterCategory('bombai'); changeScreen('home')" class="hover:text-rose-500 transition">মধু বোম্বাই বিশেষ লিচু</a></li>
+                </ul>
+            </div>
+
+            <!-- Middle Columns lists 2 -->
+            <div class="md:col-span-4">
+                <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-3.5 flex items-center gap-1.5">
+                    🛡️ আমাদের গ্রাহক সেবা
+                </h4>
+                <ul class="space-y-2 text-[11px]">
+                    <li><a href="#" onclick="showToast('লগইন প্যানেল শীঘ্রই চালু করা হবে!')" class="hover:text-rose-500 transition">আমার প্রোফাইল অ্যাকাউন্ট</a></li>
+                    <li><a href="#" onclick="showToast('লিচু বাজার - Mango Bazar এর একটি মিষ্টি প্রয়াস।')" class="hover:text-rose-500 transition">আমাদের সম্পর্কে বিস্তারিত</a></li>
+                    <li><a href="#" onclick="changeScreen('checkout'); showToast('ডেলিভারি এরিয়া দিয়ে ট্র্যাক করুন')" class="hover:text-rose-500 transition">চলমান অর্ডার ট্র্যাকিং</a></li>
+                    <li><a href="#" onclick="showToast('২৪ ঘণ্টার রিইস্যু নিশ্চয়তা পলিসি প্রযোজ্য।')" class="hover:text-rose-500 transition">রিটার্ন, রিফান্ড ও বিনিময় পলিসি</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="max-w-6xl mx-auto px-4 pt-4 border-t border-gray-800 text-center text-[10px] text-gray-500">
+            <p>Copyright All Reserved 2026-2027 | Crafted nicely with Borbila Design System.</p>
+        </div>
+    </footer>
+
+
+    <!-- Global Popups Alerts Toast message bar -->
+    <div id="global-toast" class="opacity-0 translate-y-2 fixed bottom-5 left-1/2 -translate-x-1/2 bg-gray-900/95 text-white text-xs font-semibold py-2.5 px-6 rounded-full transition-all duration-300 shadow-md backdrop-blur-xs z-50 select-none text-center pointer-events-none min-w-[250px]">
+        কার্টনে সফলভাবে যুক্ত করা হয়েছে!
+    </div>
+
+
+    <!-- Standalone external interactivity integration script -->
+    <script src="script.js"></script>
+</body>
+</html>

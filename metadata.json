@@ -1,0 +1,6 @@
+{
+  "name": "Online Lychee Store",
+  "description": "An interactive, fully responsive premium online store for fresh Bangladeshi lychees from Dinajpur and Rajshahi, featuring an interactive cart, detailed product views, a custom checkout form, and raw HTML/CSS/JS export options.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

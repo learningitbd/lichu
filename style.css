@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
+
+:root {
+  --primary-color: #d93c54;
+  --primary-hover: #be2e43;
+  --primary-light: #fef2f3;
+  --secondary-color: #25d366; /* WhatsApp Green */
+  --secondary-hover: #1ebd50;
+  --neutral-dark: #1f2937;
+  --neutral-light: #f9fafb;
+  --border-color: #e5e7eb;
+  font-family: 'Hind Siliguri', 'Inter', sans-serif;
+}
+
+body {
+  background-color: #fcfcfd;
+  color: var(--neutral-dark);
+}
+
+/* Accent details */
+.bg-rose-brand {
+  background-color: var(--primary-color);
+}
+.text-rose-brand {
+  color: var(--primary-color);
+}
+.border-rose-brand {
+  border-color: var(--primary-color);
+}
+.hover-rose-brand:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Custom bounce and fade-in animations for a responsive premium look */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Styled scrollbar for the cart in mobile drawers */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Micro interaction bouncy shadows */
+.card-hover-effect {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-hover-effect:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(217, 60, 84, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
